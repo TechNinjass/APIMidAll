@@ -1,0 +1,12 @@
+tests
+.vscode
+.coveragerc
+.pytest.ini
+*.iml
+**/__pycache__
+**/migrations/*
+*.md
+.git
+.gitignore
+!README*.md
+README-secret.md
