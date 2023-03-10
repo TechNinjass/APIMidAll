@@ -6,13 +6,13 @@
 - Into the local repository folder, run:
 
 ```bash
-python3 -m venv ./venv
+python -m venv venv
 ```
 
 - After activate the Python venv
 
 ```bash
-source venv/bin/activate
+source venv/Scripts/activate
 ```
 
 - Update **pip** package
@@ -34,4 +34,19 @@ pip install -r requirements.txt
 
 ```bash
 pip freeze > requirements.txt
+```
+
+### Start SQL Server via docker-compose
+```bash
+cd docker
+docker-compose build --no-cache
+docker-compose up --force-recreate -d ; docker-compose logs -f
+```
+
+### To stop docker docker-compose
+
+```bash
+# In the project root folder
+cd docker
+docker-compose down --remove-orphans
 ```
