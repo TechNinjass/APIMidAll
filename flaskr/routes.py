@@ -1,5 +1,5 @@
 from flask_restful import Api
-from flaskr.resources.home import HomeResource
+from flaskr.resources.google_drive import HomeResource
 
 def config_app_routes(app):
     api = Api(app)
