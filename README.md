@@ -50,3 +50,8 @@ docker-compose up --force-recreate -d ; docker-compose logs -f
 cd docker
 docker-compose down --remove-orphans
 ```
+
+```bash
+export FLASK_ENV=development
+export FLASK_APP=app.py
+```
