@@ -1,7 +1,8 @@
 from flask_restful import Resource
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from flaskr.drive import get_creds
+
+from flaskr.cloud_connection.drive_connection import get_creds
 
 class GoogleDriveResource(Resource):
 
