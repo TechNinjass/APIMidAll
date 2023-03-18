@@ -1,5 +1,5 @@
 from flask_restful import Api
-from flaskr.resources.google_drive import GoogleDriveResource
+from flaskr.resources.list_files_drive import GoogleDriveResource
 from flaskr.resources.dropbox import DropboxResource
 def config_app_routes(app):
     api = Api(app)
