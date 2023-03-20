@@ -1,5 +1,5 @@
 # Tests that the function successfully retrieves valid credentials from an existing token file. tags: [happy path]
-from flaskr.drive import get_creds
+from flaskr.cloud_connection.drive_connection import get_creds
 from pytest_mock import mocker
 import pytest
 
