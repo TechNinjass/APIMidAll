@@ -1,5 +1,3 @@
-from sqlalchemy.orm import relationship
-
 from flaskr.db import db_instance
 
 class ConfigurationModel(db_instance.Model):
@@ -15,4 +13,5 @@ class ConfigurationModel(db_instance.Model):
     path_file_origin = db_instance.Column(db_instance.String(254)) 
     path_file_destiny = db_instance.Column(db_instance.String(254)) 
 
-    clouds = relationship('CloudModel', back_populates="configuration")
+    clouds = db_instance.relationship('CloudModel', backref="configuration")
+    files = db_instance.relationship('FileModel', backref='configuration')
