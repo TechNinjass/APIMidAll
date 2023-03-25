@@ -5,7 +5,9 @@ db_instance = SQLAlchemy()
 
 def config_sql_alchemy(app):
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///project.db"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///project.db"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ECHO'] = False
 
     db_instance.app = app
     db_instance.init_app(app)
