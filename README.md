@@ -36,7 +36,7 @@ pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
 
-### Start SQL Server via docker-compose
+### Start  via docker-compose
 ```bash
 cd docker
 docker-compose build --no-cache
@@ -51,7 +51,32 @@ cd docker
 docker-compose down --remove-orphans
 ```
 
+### Start mode debug
 ```bash
 export FLASK_ENV=development
 export FLASK_APP=app.py
 ```
+
+## Executing Database 
+
+### For you to control changes in the database follow the instructions below:
+  
+  1. Open the "flaskr" folder in console with following command:
+  ```bash
+  cd flaskr
+  ```
+
+  2. Open new terminal using shell
+  ```bash
+     flask shell
+  ```
+  3. Imports dependencies 
+  ```bash
+    from flaskr.db import db_instance
+    from flaskr.models import *
+  ```
+
+  4. Then create database:
+  ```bash
+     db_instance.create_all()
+  ```
