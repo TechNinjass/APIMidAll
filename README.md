@@ -36,7 +36,7 @@ pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
 
-### Start SQL Server via docker-compose
+### Start  via docker-compose
 ```bash
 cd docker
 docker-compose build --no-cache
@@ -51,7 +51,38 @@ cd docker
 docker-compose down --remove-orphans
 ```
 
+### Start mode debug
 ```bash
 export FLASK_ENV=development
 export FLASK_APP=app.py
 ```
+
+## Executing Database Migrations using Flask-Migrate
+
+### For you to control changes in the database follow the instructions below:
+  
+  1. Open the "flaskr" folder in console with following command:
+  ```bash
+  cd flaskr
+  ```
+
+  2. Create a migration repository. If the **migrations** folder already exists this command is not necessary.
+  ```bash
+    python -m flask db init
+  ```
+  3. To build a new migration, for example, "Initial migration"
+  ```bash
+    python -m flask db migrate -m "Initial migration."
+  ```
+
+  4. Then you can apply the migration to the database:
+  ```bash
+    python -m flask db upgrade
+  ```
+
+**Notes**: To see all the commands that are available run this command:
+  ```bash
+    python -m flask db --help
+  ```
+
+  Official documentation for [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)
