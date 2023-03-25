@@ -57,7 +57,7 @@ export FLASK_ENV=development
 export FLASK_APP=app.py
 ```
 
-## Executing Database Migrations using Flask-Migrate
+## Executing Database 
 
 ### For you to control changes in the database follow the instructions below:
   
@@ -66,23 +66,17 @@ export FLASK_APP=app.py
   cd flaskr
   ```
 
-  2. Create a migration repository. If the **migrations** folder already exists this command is not necessary.
+  2. Open new terminal using shell
   ```bash
-    python -m flask db init
+     flask shell
   ```
-  3. To build a new migration, for example, "Initial migration"
+  3. Imports dependencies 
   ```bash
-    python -m flask db migrate -m "Initial migration."
-  ```
-
-  4. Then you can apply the migration to the database:
-  ```bash
-    python -m flask db upgrade
+    from flaskr.db import db_instance
+    from flaskr.models import *
   ```
 
-**Notes**: To see all the commands that are available run this command:
+  4. Then create database:
   ```bash
-    python -m flask db --help
+     db_instance.create_all()
   ```
-
-  Official documentation for [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)
