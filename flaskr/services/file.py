@@ -1,5 +1,6 @@
 from flaskr.cloud_connection.aws_connection import connect_to_s3
 from flaskr.models.file import FileModel
+from boto3 import *
  
 class FileModelService:
     def __init__(self):
@@ -13,9 +14,10 @@ class FileModelService:
             file_name = item['name']
             file_id = item['id']
             file_content = self.file_model.download_file_drive(file_id)
-            print(file_id)
-            print(file_name)
-            print(file_content)
-            #s3.put_object(Bucket=bucket_name, Key=file_name, Body=file_content)
+            if file_content is not None:
+                s3.put_object(Bucket=bucket_name, Key=file_name, Body=file_content)
+            else:
+                print(f"O arquivo {file_name} não foi baixado com sucesso.")
+
 
         print(f"{len(files_drive)} arquivos foram transferidos para o S3 com sucesso.")

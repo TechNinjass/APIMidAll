@@ -23,25 +23,31 @@ class FileModel(db_instance.Model):
     def get_files_drive(cls):
         try:
             service = build('drive', 'v3', credentials=get_creds())
-            print("deu certo a conexão")
+            print("Conexão com o Google Drive estabelecida com sucesso.")
+
+            # ID da pasta que você deseja listar os arquivos
+            folder_id = '1CVSxS3Tktbz1ugxATpsjG8ZRfBr9ayRp'
+
+            query = f"'{folder_id}' in parents and trashed = true"
+
             results = service.files().list(
-                pageSize=10, fields="nextPageToken, files(id, name)").execute()
+                q=query, pageSize=10, fields="nextPageToken, files(id, name)").execute()
+
             items = results.get('files', [])
 
             if not items:
-                print('No files found.')
+                print('Nenhum arquivo encontrado.')
                 return []
 
-            print('Files:')
+            print('Arquivos:')
             for item in items:
                 print(u'{0} ({1})'.format(item['name'], item['id']))
 
             return items
         except HttpError as error:
-            # TODO(developer) - Handle errors from drive API.
-            print(f'An error occurred: {error}')
+            print(f'Ocorreu um erro: {error}')
             return []
-    
+
     @classmethod
     def download_file_drive(cls, file_id):
         try:
@@ -58,3 +64,6 @@ class FileModel(db_instance.Model):
         except HttpError as error:
             # TODO(developer) - Handle errors from drive API.
             print(f'An error occurred: {error}')
+
+
+#https://drive.google.com/drive/folders/1zbDbzBJxMHray9uY7bIJQw7viA7YsUmK?usp=share_link
