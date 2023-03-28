@@ -28,7 +28,7 @@ class FileModel(db_instance.Model):
             # ID da pasta que você deseja listar os arquivos
             folder_id = '1CVSxS3Tktbz1ugxATpsjG8ZRfBr9ayRp'
 
-            query = f"'{folder_id}' in parents and trashed = true"
+            query = f"'{folder_id}' in parents and trashed = false"
 
             results = service.files().list(
                 q=query, pageSize=10, fields="nextPageToken, files(id, name)").execute()
