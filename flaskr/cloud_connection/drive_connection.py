@@ -5,7 +5,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 
-SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+# SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+SCOPES = ['https://www.googleapis.com/auth/drive']
 
 def get_creds():
     creds = None
@@ -18,7 +19,7 @@ def get_creds():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                r'C:\Users\gomes\OneDrive\Área de Trabalho\midall-parent\midall-backend\flaskr\cloud_connection\credentials.json', SCOPES)
+                r'C:\Users\ZARRUDA\Desktop\FACULDADE\api\midall-backend\flaskr\cloud_connection\credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
 
         with open('token.json', 'w') as token:
