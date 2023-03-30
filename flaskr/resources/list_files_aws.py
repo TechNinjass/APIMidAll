@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_restful import Resource
 from flaskr.cloud_connection.aws_connection import connect_to_s3
 
@@ -12,5 +14,8 @@ class AWSResource(Resource):
         if 'Contents' in objects:
             for obj in objects['Contents']:
                 print(f'  {obj["Key"]}')
+                obj['LastModified'] = obj['LastModified'].strftime('%Y-%m-%d %H:%M:%S')
         else:
             print("Sem item")
+    
+        return objects
