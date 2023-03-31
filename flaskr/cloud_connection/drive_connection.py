@@ -19,7 +19,7 @@ def get_creds():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                r'C:\Users\ZARRUDA\Desktop\FACULDADE\api\midall-backend\flaskr\cloud_connection\credentials.json', SCOPES)
+                r'C:\Users\josej\OneDrive\Área de Trabalho\midall-parent\midall-backend\flaskr\cloud_connection\credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
 
         with open('token.json', 'w') as token:
