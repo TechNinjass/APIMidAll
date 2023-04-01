@@ -13,7 +13,7 @@ config_sql_alchemy(app)
 api = config_app_routes(app)
 
 # Scheduled_job
-init_apscheduler(app, True)
+init_apscheduler(app, False)
 
 if __name__ == '__main__':
     app.run()
