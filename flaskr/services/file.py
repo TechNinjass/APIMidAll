@@ -1,14 +1,14 @@
 from flaskr.cloud_connection.aws_connection import connect_to_s3
-from flaskr.models.file import FileModel
+from flaskr.cloud_connection.drive_connection import Drive
 from boto3 import *
  
 class FileModelService:
     def __init__(self):
-        self.file_model = FileModel()
+        self.file_model = Drive()
 
     def transfer_files(self):
         s3, bucket_name = connect_to_s3()
-        files_drive = FileModel.get_files_drive()
+        files_drive = Drive.get_files_drive()
 
         for item in files_drive:
             file_name = item['name']
