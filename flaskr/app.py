@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 
 from flaskr.db import config_sql_alchemy
 from flaskr.routes import config_app_routes
@@ -12,8 +13,11 @@ config_sql_alchemy(app)
 # Config Flask Restful
 api = config_app_routes(app)
 
+# Config CORS
+CORS(app)
+
 # Scheduled_job
-init_apscheduler(app, False)
+init_apscheduler(app, True)
 
 if __name__ == '__main__':
     app.run()

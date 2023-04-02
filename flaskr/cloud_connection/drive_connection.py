@@ -3,12 +3,13 @@ import os
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from io import BytesIO
 from googleapiclient.http import MediaIoBaseDownload
+from io import BytesIO
 
-# SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
 class Drive():
@@ -60,8 +61,6 @@ class Drive():
             print(f'An error occurred: {error}')
 
 
-#https://drive.google.com/drive/folders/1zbDbzBJxMHray9uY7bIJQw7viA7YsUmK?usp=share_link
-
 def get_creds():
         creds = None
 
@@ -80,3 +79,5 @@ def get_creds():
                 token.write(creds.to_json())
 
         return creds
+
+#https://drive.google.com/drive/folders/1zbDbzBJxMHray9uY7bIJQw7viA7YsUmK?usp=share_link

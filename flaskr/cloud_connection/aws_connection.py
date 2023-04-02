@@ -2,8 +2,8 @@ import boto3
 
 def connect_to_s3():
 
-    aws_access_key_id = 'AKIA2J3TPQFIQ32P2DEZ'
-    aws_secret_access_key = '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'
+    aws_access_key_id = 'AKIA2J3TPQFIR4MWOGQO'
+    aws_secret_access_key = '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'
     
     bucket_name = 'techninja'
 
