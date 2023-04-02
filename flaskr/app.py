@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+
 from flaskr.db import config_sql_alchemy
 from flaskr.routes import config_app_routes
 from flaskr.job_scheduler import init_apscheduler

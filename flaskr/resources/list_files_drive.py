@@ -1,10 +1,9 @@
 from flask_restful import Resource
-from flaskr.models.file import FileModel
-
+from flaskr.cloud_connection.drive_connection import Drive
 class GoogleDriveResource(Resource):
 
     def get(self):
-        items = FileModel.get_files_drive()
+        items = Drive.get_files_drive()
         
         if not items:
             print('No files found.')

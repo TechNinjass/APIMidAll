@@ -6,7 +6,6 @@ import pytest
 
 class TestDrive:
 
-    
     def test_token_file_exists_and_contains_valid_credentials(self, mocker):
         # Setup
         mocker.patch('os.path.exists', return_value=True)

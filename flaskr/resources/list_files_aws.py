@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask_restful import Resource
 from flaskr.cloud_connection.aws_connection import connect_to_s3
 
