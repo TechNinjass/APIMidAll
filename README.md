@@ -26,6 +26,7 @@ python -m pip install -U pip
 - Installing the Python project's dependency packages
 
 ```bash
+pip install --upgrade pip setuptools wheel
 pip install -r requirements.txt
 ```
 
