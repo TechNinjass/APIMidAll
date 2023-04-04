@@ -1,6 +1,8 @@
+from flaskr.services.file import FileModelService
+
 from flask_restful import Resource
 
-from flaskr.services.file import FileModelService
+
 
 class FileTransferResource(Resource):
     def post(self):
