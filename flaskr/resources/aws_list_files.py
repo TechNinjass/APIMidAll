@@ -1,8 +1,8 @@
 from flask_restful import Resource
-from flaskr.cloud_connection.aws_connection import connect_to_s3
+from flaskr.cloud.aws import connect_to_s3
 
 
-class AWSResource(Resource):
+class AWSFilesResource(Resource):
     def get(self):
         s3, bucket_name = connect_to_s3()
 

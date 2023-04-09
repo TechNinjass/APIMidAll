@@ -1,6 +1,6 @@
 from flask_restful import Resource
-from flaskr.cloud_connection.drive_connection import Drive
-class GoogleDriveResource(Resource):
+from flaskr.cloud.drive import Drive
+class GoogleDriveFilesResource(Resource):
 
     def get(self):
         items = Drive.get_files_drive()

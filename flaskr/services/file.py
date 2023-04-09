@@ -1,5 +1,5 @@
-from flaskr.cloud_connection.aws_connection import connect_to_s3
-from flaskr.cloud_connection.drive_connection import Drive
+from flaskr.cloud.aws import connect_to_s3
+from flaskr.cloud.drive import Drive
 from boto3 import *
  
 class FileModelService:
