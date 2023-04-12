@@ -10,13 +10,15 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
 class Drive():
-    def __init__(self, creds):
+    def __init__(self, creds, client_id, client_secret):
+        self.client_id = client_id
+        self.client_secret = client_secret
         self.creds = creds
 
     @classmethod
-    def get_files_drive(self):
+    def get_files_drive(self, client_id, client_secret):
         try:
-            service = build('drive', 'v3', credentials=get_creds(self.creds))
+            service = build('drive', 'v3', credentials=get_creds(client_id, client_secret))
             print("Conexão com o Google Drive estabelecida com sucesso.")
 
             # ID da pasta que você deseja listar os arquivos
@@ -76,7 +78,9 @@ def get_creds(client_id, client_secret):
 
     creds = flow.run_local_server(port=0)
     service = build('drive', 'v3', credentials=creds)
-    return creds
+    client_id = creds.client_id
+    client_secret = creds.client_secret
+    return creds, client_id, client_secret
     
 
 
