@@ -9,16 +9,15 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
-class Drive():
-    def __init__(self, creds, client_id, client_secret):
+class Drive:
+    def __init__(self, client_id, client_secret):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.creds = creds
 
-    @classmethod
-    def get_files_drive(self, client_id, client_secret):
+    def get_files_drive(self):
         try:
-            service = build('drive', 'v3', credentials=get_creds(client_id, client_secret))
+            creds = get_creds(self.client_id, self.client_secret)
+            service = build('drive', 'v3', credentials=creds)
             print("Conexão com o Google Drive estabelecida com sucesso.")
 
             # ID da pasta que você deseja listar os arquivos
@@ -44,22 +43,22 @@ class Drive():
             print(f'Ocorreu um erro: {error}')
             return []
 
-    @classmethod
-    def download_file_drive(self, file_id):
-        try:
-            service = build('drive', 'v3', credentials=self.creds)
-            file = service.files().get(fileId=file_id).execute()
-            file_content = BytesIO()
-            downloader = MediaIoBaseDownload(file_content, service.files().get_media(fileId=file_id))
-            done = False
-            while done is False:
-                status, done = downloader.next_chunk()
-                # print(f'Download {int(status.progress() * 100)}.')
-            file_content.seek(0)
-            return bytes(file_content.getvalue())
-        except HttpError as error:
-            # TODO(developer) - Handle errors from drive API.
-            print(f'An error occurred: {error}')
+    # def download_file_drive(self, file_id):
+    #     try:
+    #         service = build('drive', 'v3', credentials=self.creds)
+    #         file = service.files().get(fileId=file_id).execute()
+    #         file_content = BytesIO()
+    #         downloader = MediaIoBaseDownload(file_content, service.files().get_media(fileId=file_id))
+    #         done = False
+    #         while done is False:
+    #             status, done = downloader.next_chunk()
+    #             # print(f'Download {int(status.progress() * 100)}.')
+    #         file_content.seek(0)
+    #         return bytes(file_content.getvalue())
+    #     except HttpError as error:
+    #         # TODO(developer) - Handle errors from drive API.
+    #         print(f'An error occurred: {error}')
+
 
 
 def get_creds(client_id, client_secret):
@@ -77,11 +76,4 @@ def get_creds(client_id, client_secret):
     }, scopes=SCOPES)
 
     creds = flow.run_local_server(port=0)
-    service = build('drive', 'v3', credentials=creds)
-    client_id = creds.client_id
-    client_secret = creds.client_secret
-    return creds, client_id, client_secret
-    
-
-
-    
+    return creds

@@ -12,7 +12,8 @@ def config_app_routes(app):
     __setting_route_doc(GoogleDriveResource, "/drive", api)
     __setting_route_doc(AWSFilesResource, "/aws_files", api)
     __setting_route_doc(FileTransferResource, "/transfer_files", api)
-    __setting_route_doc(GoogleDriveFilesResource, "/drive_files", api)
+    __setting_route_doc(GoogleDriveFilesResource, "/drive_files/<client_id>/<client_secret>", api)
+    
     return api
 
 
