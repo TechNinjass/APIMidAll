@@ -8,6 +8,7 @@ from flaskr.resources.drive_list_files import GoogleDriveFilesResource
 
 def config_app_routes(app):
     api = Api(app)
+    
     __setting_route_doc(GoogleDriveResource, "/drive", api)
     __setting_route_doc(AWSFilesResource, "/aws_files", api)
     __setting_route_doc(FileTransferResource, "/transfer_files", api)

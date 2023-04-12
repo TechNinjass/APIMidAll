@@ -1,14 +1,13 @@
 from flask import request
 from flask_restful import Resource
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from flaskr.cloud.drive import Drive
 
+from flaskr.cloud.drive import get_creds
 
 class GoogleDriveResource(Resource):
     def post(self):
+        client_id = request.json.get("client_id")
+        client_secret = request.json.get("client_secret")
 
-
-        drive = Drive()
-    
-        return {"message": "Conexão com o Google Drive estabelecida com sucesso."}, 200
+        con = get_creds(client_id=client_id,
+                            client_secret=client_secret)
+        return con
