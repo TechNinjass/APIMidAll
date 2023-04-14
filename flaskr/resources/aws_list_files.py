@@ -1,4 +1,5 @@
 from flask_restful import Resource
+
 from flaskr.cloud.aws import connect_to_s3
 
 

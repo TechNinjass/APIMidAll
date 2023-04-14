@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 
 from flaskr.routes import config_app_routes
+
 # from flaskr.job_scheduler import init_apscheduler
 
 app = Flask(__name__)

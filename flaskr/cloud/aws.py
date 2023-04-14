@@ -1,5 +1,6 @@
 import boto3
 
+
 def connect_to_s3():
 
     aws_access_key_id = ''

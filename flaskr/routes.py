@@ -1,7 +1,7 @@
 from flask_restful import Api
 
-from flaskr.resources.drive_connection import GoogleDriveResource
 from flaskr.resources.aws_list_files import AWSFilesResource
+from flaskr.resources.drive_connection import GoogleDriveResource
 # from flaskr.resources.file_transfer import FileTransferResource
 from flaskr.resources.drive_list_files import GoogleDriveFilesResource
 
