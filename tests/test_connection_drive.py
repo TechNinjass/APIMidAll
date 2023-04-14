@@ -1,5 +1,5 @@
 # Tests that the function successfully retrieves valid credentials from an existing token file. tags: [happy path]
-from flaskr.cloud_connection.drive_connection import get_creds
+from flaskr.cloud.drive import GoogleDrive
 from pytest_mock import mocker
 import pytest
 
@@ -14,7 +14,7 @@ class TestDrive:
         mocker.patch('google.oauth2.credentials.Credentials.from_authorized_user_file', return_value=creds_mock)
 
         # Execution
-        creds = get_creds()
+        creds = GoogleDrive.get_creds()
 
         # Assertion
         assert creds == creds_mock
