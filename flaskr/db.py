@@ -1,7 +1,8 @@
-import os
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 import flaskr.config_app as ca
+
 db_instance = SQLAlchemy()
 
 def config_sql_alchemy(app):
@@ -13,6 +14,7 @@ def config_sql_alchemy(app):
     db_instance.app = app
     db_instance.init_app(app)
 
+
 def db_persist(func):
     def persist(*args, **kwargs):
         func(*args, **kwargs)
@@ -23,9 +25,3 @@ def db_persist(func):
             db_instance.session.rollback()
             return False
     return persist
-
-def testeconn():
-
-    db_instance.session.execute("select * from dataFake")
-
-    print("Teste")
