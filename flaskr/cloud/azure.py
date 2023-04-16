@@ -22,7 +22,7 @@ class Azure:
                 self.account_key = credentials["account_key"]
                 self.container_name = credentials["container_name"]
 
-        connect_str = f"DefaultEndpointsProtocol=https;AccountName={self.account_name};AccountKey={self.account_key};EndpointSuffix=core.windows.net"
+        connect_str = ""
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         if not use_pickle:
@@ -36,13 +36,16 @@ class Azure:
         with open("credentials.pickle", "rb") as f:
             credentials = pickle.load(f)
 
-        connect_str = f"DefaultEndpointsProtocol=https;AccountName={credentials['midall']};AccountKey={credentials['cqsL62aBQBuMSh3Ay2v31fE+CoZHGA4qRiwvizaTRgKmw8bRK4oLL2kyzwm3o89V61K6qOuhFvHQ+AStme6swA==']};EndpointSuffix=core.windows.net"
+        connect_str = f"DefaultEndpointsProtocol=https;AccountName={credentials['account_name']};AccountKey={credentials['account_key']};EndpointSuffix=core.windows.net"
 
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_client = blob_service_client.get_container_client(credentials['midall'])
+        container_client = blob_service_client.get_container_client(credentials['container_name'])
 
         blob_list = container_client.list_blobs()
 
+        file_names = []
         for blob in blob_list:
-            print(blob.name)
+            file_names.append(blob.name)
+
+        return file_names

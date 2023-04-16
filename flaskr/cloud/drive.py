@@ -49,11 +49,11 @@ class GoogleDrive:
         try:
             drive_client = build("drive", "v3", credentials=self.credentials)
             files = []
-            results = (
-                drive_client.files()
-                .list(pageSize=10, fields="nextPageToken, files(id, name)")
-                .execute()
-            )
+            results = drive_client.files().list(
+                q="'1CVSxS3Tktbz1ugxATpsjG8ZRfBr9ayRp' in parents",
+                pageSize=10,
+                fields="nextPageToken, files(id, name)"
+            ).execute()
             items = results.get("files", [])
 
             if not items:

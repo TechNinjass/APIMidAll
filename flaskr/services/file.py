@@ -19,11 +19,11 @@ class FileModelService:
             file_name = item.split("(")[0].strip()
             file_id = item.split("(")[1].replace(")", "")
             file_content = self.google_drive.download_file(file_id)
-
+            
             if not isinstance(file_content, bytes):
                 file_content = bytes(str(file_content), 'utf-8')
 
-            blob_client = container_client.get_blob_client(blob=file_name, container='midall')
+            blob_client = container_client.get_blob_client(container='midall', blob=file_name)
 
             try:
                 blob_client.upload_blob(file_content, overwrite=True)
