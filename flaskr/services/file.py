@@ -1,6 +1,8 @@
+from azure.core.exceptions import AzureError
+
 from flaskr.cloud.azure import Azure
 from flaskr.cloud.drive import GoogleDrive
-from azure.core.exceptions import AzureError
+
 
 class FileModelService:
     def __init__(self):
