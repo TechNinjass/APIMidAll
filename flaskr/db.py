@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
+
 import flaskr.config_app as ca
 
 db_instance = SQLAlchemy()
