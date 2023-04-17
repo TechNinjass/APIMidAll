@@ -22,6 +22,7 @@ class Azure:
                 self.account_key = credentials["account_key"]
                 self.container_name = credentials["container_name"]
 
+        #add connect string here
         connect_str = ""
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
@@ -36,6 +37,7 @@ class Azure:
         with open("credentials.pickle", "rb") as f:
             credentials = pickle.load(f)
 
+        #add connect string here
         connect_str = f"DefaultEndpointsProtocol=https;AccountName={credentials['account_name']};AccountKey={credentials['account_key']};EndpointSuffix=core.windows.net"
 
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
