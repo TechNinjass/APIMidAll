@@ -21,7 +21,7 @@ class FileModelService:
             file_name = item.split("(")[0].strip()
             file_id = item.split("(")[1].replace(")", "")
             file_content = self.google_drive.download_file(file_id)
-            
+
             if not isinstance(file_content, bytes):
                 file_content = bytes(str(file_content), 'utf-8')
 
@@ -30,5 +30,9 @@ class FileModelService:
             try:
                 blob_client.upload_blob(file_content, overwrite=True)
                 print(f"Arquivo {file_name} transferido com sucesso para o Azure Blob Storage!")
+
+                self.google_drive.remove_files(file_id)
+                print(f"Arquivo {file_name} deletado do Google Drive!")
+
             except AzureError as ex:
                 print('Um erro ocorreu durante o upload do arquivo: {}'.format(ex))

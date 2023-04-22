@@ -3,7 +3,6 @@ import pickle
 
 from azure.storage.blob import BlobServiceClient
 
-
 class Azure:
     def __init__(self):
         self.account_name = None
@@ -14,16 +13,10 @@ class Azure:
         self.account_name = account_name
         self.account_key = account_key
         self.container_name = container_name
-
-        if use_pickle and os.path.exists("credentials.pickle"):
-            with open("credentials.pickle", "rb") as f:
-                credentials = pickle.load(f)
-                self.account_name = credentials["account_name"]
-                self.account_key = credentials["account_key"]
-                self.container_name = credentials["container_name"]
-
-        #add connect string here
+        
+        #fix line
         connect_str = ""
+
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         if not use_pickle:
@@ -37,9 +30,9 @@ class Azure:
         with open("credentials.pickle", "rb") as f:
             credentials = pickle.load(f)
 
-        #add connect string here
-        connect_str = f"DefaultEndpointsProtocol=https;AccountName={credentials['account_name']};AccountKey={credentials['account_key']};EndpointSuffix=core.windows.net"
-
+        #fix line
+        connect_str = ""
+        
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         container_client = blob_service_client.get_container_client(credentials['container_name'])
