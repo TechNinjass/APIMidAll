@@ -21,13 +21,13 @@ class Azure:
 
         if not use_pickle:
             credentials = {"account_name": self.account_name, "account_key": self.account_key, "container_name": self.container_name}
-            with open("credentials.pickle", "wb") as f:
+            with open("credentialsAzure.pickle", "wb") as f:
                 pickle.dump(credentials, f)
 
         return blob_service_client
 
     def list_files(self):
-        with open("credentials.pickle", "rb") as f:
+        with open("credentialsAzure.pickle", "rb") as f:
             credentials = pickle.load(f)
 
         #fix line

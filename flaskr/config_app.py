@@ -8,7 +8,7 @@ DEFAULT_PORT = ''
 
 DEFAULT_PWD_ENCODED = urllib.parse.quote_plus(DEFAULT_PWD)
 
-MIDALL_DATABASE = os.environ.get('MIDALL_DATABASE', 'midall')
+MIDALL_DATABASE = os.environ.get('MIDALL_DATABASE', '')
 
 MIDALL_DB_SCHEMA = f"{MIDALL_DATABASE}.{os.environ.get('MIDALL_DB_SCHEMA', 'dbo')}"
 
