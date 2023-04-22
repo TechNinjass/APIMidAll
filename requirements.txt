@@ -40,7 +40,6 @@ itsdangerous==2.1.2
 jaraco.classes==3.2.3
 Jinja2==3.1.2
 jmespath==1.0.1
-jsonpickle==3.0.1
 keyring==23.13.1
 Mako==1.2.4
 MarkupSafe==2.1.2
@@ -60,7 +59,6 @@ pycodestyle==2.10.0
 pycparser==2.21
 pyflakes==3.0.1
 PyJWT==2.6.0
-pymssql==2.2.7
 pyparsing==3.0.9
 pytest==7.2.2
 pytest-mock==3.10.0

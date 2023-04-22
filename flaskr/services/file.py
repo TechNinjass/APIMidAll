@@ -8,7 +8,7 @@ from flaskr.models.file_transfer import FileTransferModel
 
 
 class FileModelService:
-    def init(self):
+    def __init__(self):
         self.google_drive = GoogleDrive()
         self.azure = Azure()
 
