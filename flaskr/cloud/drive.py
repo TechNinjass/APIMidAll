@@ -25,10 +25,10 @@ class GoogleDrive:
                     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                 }
             },
-            scopes=["https://www.googleapis.com/auth/drive.metadata.readonly"],
+            scopes=["https://www.googleapis.com/auth/drive"],
         )
 
-        credentials = flow.run_local_server(port=0)
+        credentials = flow.run_local_server(port=0, access_type='offline', include_granted_scopes=False)
 
         with open("token.pickle", "wb") as token:
             pickle.dump(credentials, token)
@@ -90,3 +90,20 @@ class GoogleDrive:
         except HttpError as error:
             return {"error": f"Ocorreu um erro ao baixar o arquivo: {error}"}
 
+    def remove_files(self, file_id):
+        if not self.credentials:
+            if os.path.exists("token.pickle"):
+                with open("token.pickle", "rb") as token:
+                    self.credentials = pickle.load(token)
+            else:
+                return {
+                    "error": "As credenciais do Google Drive não foram encontradas."
+                }
+
+        service = build('drive', 'v3', credentials=self.credentials)
+
+        try:
+            service.files().delete(fileId=file_id).execute()
+            print(f'O arquivo com ID {file_id} foi excluído com sucesso!')
+        except HttpError as error:
+            print(f'Ocorreu um erro: {error}')
