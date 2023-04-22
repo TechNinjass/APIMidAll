@@ -1,4 +1,3 @@
-import os
 import pickle
 
 from azure.storage.blob import BlobServiceClient
@@ -13,9 +12,8 @@ class Azure:
         self.account_name = account_name
         self.account_key = account_key
         self.container_name = container_name
-        
-        #fix line
-        connect_str = ""
+
+        connect_str = f"DefaultEndpointsProtocol=https;AccountName={account_name};AccountKey={account_key};EndpointSuffix=core.windows.net;ContainerName={container_name}"
 
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
@@ -30,17 +28,22 @@ class Azure:
         with open("credentialsAzure.pickle", "rb") as f:
             credentials = pickle.load(f)
 
-        #fix line
-        connect_str = ""
-        
+        connect_str = f"DefaultEndpointsProtocol=https;AccountName={credentials['account_name']};AccountKey={credentials['account_key']};EndpointSuffix=core.windows.net"
+
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
-        container_client = blob_service_client.get_container_client(credentials['container_name'])
+        container_name = credentials['container_name']
+        container_client = blob_service_client.get_container_client(container_name)
 
         blob_list = container_client.list_blobs()
 
-        file_names = []
+        files = []
         for blob in blob_list:
-            file_names.append(blob.name)
+            file = {
+                "name": blob.name,
+                "size": blob.size,
+                "content_type": blob.content_settings.content_type
+            }
+            files.append(file)
 
-        return file_names
+        return files
