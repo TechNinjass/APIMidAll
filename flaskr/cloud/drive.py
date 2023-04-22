@@ -30,7 +30,7 @@ class GoogleDrive:
 
         credentials = flow.run_local_server(port=0, access_type='offline', include_granted_scopes=False)
 
-        with open("token.pickle", "wb") as token:
+        with open("tokenDrive.pickle", "wb") as token:
             pickle.dump(credentials, token)
 
         credentials = credentials
@@ -39,8 +39,8 @@ class GoogleDrive:
 
     def list_files(self):
         if not self.credentials:
-            if os.path.exists("token.pickle"):
-                with open("token.pickle", "rb") as token:
+            if os.path.exists("tokenDrive.pickle"):
+                with open("tokenDrive.pickle", "rb") as token:
                     self.credentials = pickle.load(token)
             else:
                 return {
@@ -69,8 +69,8 @@ class GoogleDrive:
         
     def download_file(self, file_id):
         if not self.credentials:
-            if os.path.exists("token.pickle"):
-                with open("token.pickle", "rb") as token:
+            if os.path.exists("tokenDrive.pickle"):
+                with open("tokenDrive.pickle", "rb") as token:
                     self.credentials = pickle.load(token)
             else:
                 return {
@@ -92,8 +92,8 @@ class GoogleDrive:
 
     def remove_files(self, file_id):
         if not self.credentials:
-            if os.path.exists("token.pickle"):
-                with open("token.pickle", "rb") as token:
+            if os.path.exists("tokenDrive.pickle"):
+                with open("tokenDrive.pickle", "rb") as token:
                     self.credentials = pickle.load(token)
             else:
                 return {
