@@ -16,7 +16,6 @@ colorama==0.4.6
 cryptography==39.0.2
 dropbox==11.36.0
 exceptiongroup==1.1.1
-flake8==6.0.0
 Flask==2.2.3
 Flask-APScheduler==1.12.4
 Flask-Cors==3.0.10
@@ -35,16 +34,13 @@ idna==3.4
 importlib-metadata==6.0.0
 iniconfig==2.0.0
 isodate==0.6.1
-isort==5.12.0
 itsdangerous==2.1.2
 jaraco.classes==3.2.3
 Jinja2==3.1.2
 jmespath==1.0.1
-jsonpickle==3.0.1
 keyring==23.13.1
 Mako==1.2.4
 MarkupSafe==2.1.2
-mccabe==0.7.0
 microsoftgraph-python==1.1.5
 more-itertools==9.1.0
 msal==1.21.0
@@ -56,11 +52,8 @@ ply==3.11
 protobuf==4.22.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pycodestyle==2.10.0
 pycparser==2.21
-pyflakes==3.0.1
 PyJWT==2.6.0
-pymssql==2.2.7
 pyparsing==3.0.9
 pytest==7.2.2
 pytest-mock==3.10.0

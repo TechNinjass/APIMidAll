@@ -1,6 +1,7 @@
 from flaskr.db import db_instance
 from flaskr.models.file_transfer import FileTransferModel
 from flaskr.cloud.azure import Azure
+import pickle
 
 class TestAzure:
 
@@ -13,6 +14,9 @@ class TestAzure:
         mock_session.commit.assert_called_once()
 
     def test_list_files_empty_container(self, mocker):
+        credentials = {"account_name": "test_account", "account_key": "test_key", "container_name": "test_container"}
+        with open("credentialsAzure.pickle", "wb") as f:
+            pickle.dump(credentials, f)
         mock_blob_service_client = mocker.Mock()
         mock_container_client = mocker.Mock()
         mock_blob_service_client.get_container_client.return_value = mock_container_client
