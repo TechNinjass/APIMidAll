@@ -20,8 +20,6 @@ class FileModelService:
             print("Nenhum arquivo encontrado no Google Drive.")
             return
 
-        transfers = [] 
-
         for item in files_drive:
             file_name = item.split("(")[0].strip()
             file_id = item.split("(")[1].replace(")", "")
@@ -46,12 +44,7 @@ class FileModelService:
                 transfer.date_upload = datetime.now()
                 transfer.data_transfer = datetime.now()
 
-                transfers.append(transfer) 
+                transfer.save() 
 
             except AzureError as ex:
                 print('Um erro ocorreu durante o upload do arquivo: {}'.format(ex))
-
-
-        for transfer in transfers:
-                transfer.save()
-                transfers = []
