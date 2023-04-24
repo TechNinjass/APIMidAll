@@ -8,6 +8,7 @@ from flaskr.routes import config_app_routes
 
 app = Flask(__name__)
 
+app.config['BUNDLE_ERRORS'] = True
 # Config CORS
 CORS(app)
 
@@ -21,7 +22,7 @@ api = config_app_routes(app)
 migrate = load_migrate(db_instance, app)
 
 # Scheduled_job
-init_apscheduler(app, False)
+init_apscheduler(app, True)
 
 if __name__ == '__main__':
     app.run()
