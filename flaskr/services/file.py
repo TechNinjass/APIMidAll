@@ -1,23 +1,50 @@
-from flaskr.cloud_connection.aws_connection import connect_to_s3
-from flaskr.cloud_connection.drive_connection import Drive
-from boto3 import *
- 
+from datetime import datetime
+
+from azure.core.exceptions import AzureError
+
+from flaskr.cloud.azure import Azure
+from flaskr.cloud.drive import GoogleDrive
+from flaskr.models.file_transfer import FileTransferModel
+
+
 class FileModelService:
     def __init__(self):
-        self.file_model = Drive()
+        self.google_drive = GoogleDrive()
+        self.azure = Azure()
 
     def transfer_files(self):
-        s3, bucket_name = connect_to_s3()
-        files_drive = Drive.get_files_drive()
+        container_client = self.azure.connection_azure()
+        files_drive = self.google_drive.list_files().get('files')
+
+        if not files_drive:
+            print("Nenhum arquivo encontrado no Google Drive.")
+            return
 
         for item in files_drive:
-            file_name = item['name']
-            file_id = item['id']
-            file_content = self.file_model.download_file_drive(file_id)
-            if file_content is not None:
-                s3.put_object(Bucket=bucket_name, Key=file_name, Body=file_content)
-            else:
-                print(f"O arquivo {file_name} não foi baixado com sucesso.")
+            file_name = item.split("(")[0].strip()
+            file_id = item.split("(")[1].replace(")", "")
+            file_content = self.google_drive.download_file(file_id)
 
+            if not isinstance(file_content, bytes):
+                file_content = bytes(str(file_content), 'utf-8')
 
-        print(f"{len(files_drive)} arquivos foram transferidos para o S3 com sucesso.")
+            blob_client = container_client.get_blob_client(container='midall', blob=file_name)
+
+            try:
+                blob_client.upload_blob(file_content, overwrite=True)
+                print(f"Arquivo {file_name} transferido com sucesso para o Azure Blob Storage!")
+
+                self.google_drive.remove_files(file_id)
+                print(f"Arquivo {file_name} deletado do Google Drive!")
+
+                transfer = FileTransferModel()
+                transfer.name = file_name
+                transfer.size = len(file_content)
+                transfer.format = file_name.split(".")[-1]
+                transfer.date_upload = datetime.now()
+                transfer.data_transfer = datetime.now()
+
+                transfer.save() 
+
+            except AzureError as ex:
+                print('Um erro ocorreu durante o upload do arquivo: {}'.format(ex))

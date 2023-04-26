@@ -1,11 +1,13 @@
 from flask_apscheduler import APScheduler
-
+from flaskr.db import db_instance
 from flaskr.services.file import FileModelService
 
+
 def task_tranfer_files():
-    fm = FileModelService()
-    fm.transfer_files()
-    print(fm)
+    with db_instance.app.app_context():
+        fm = FileModelService()
+        fm.transfer_files()
+        print(fm)
 
 def init_apscheduler(app, scheduler_enabled=False):
     if scheduler_enabled:
