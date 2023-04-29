@@ -17,20 +17,19 @@ class Azure:
         if os.path.exists("credentialsAzure.pickle"):
             with open("credentialsAzure.pickle", "rb") as f:
                 credentials = pickle.load(f)
-            self.account_name = credentials["account_name"]
-            self.account_key = credentials["account_key"]
-            self.container_name = credentials["container_name"]
-        elif not self.account_name or not self.account_key or not self.container_name:
-            return "As credenciais do Azure não foram fornecidas."
+            if self.account_name != credentials["account_name"] or self.account_key != credentials["account_key"] or self.container_name != credentials["container_name"]:
+                use_pickle = False
+        else:
+            use_pickle = False
         
-        connect_str = f"DefaultEndpointsProtocol=https;AccountName={self.account_name};AccountKey={self.account_key};EndpointSuffix=core.windows.net"
-
-        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-
         if not use_pickle:
             credentials = {"account_name": self.account_name, "account_key": self.account_key, "container_name": self.container_name}
             with open("credentialsAzure.pickle", "wb") as f:
                 pickle.dump(credentials, f)
+
+        connect_str = f"DefaultEndpointsProtocol=https;AccountName={self.account_name};AccountKey={self.account_key};EndpointSuffix=core.windows.net"
+
+        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
         return blob_service_client
 
