@@ -3,7 +3,7 @@ import pickle
 
 from azure.storage.blob import BlobServiceClient
 
-class Azure:
+class Azure():
     def __init__(self):
         self.account_name = None
         self.account_key = None
