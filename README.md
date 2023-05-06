@@ -99,13 +99,13 @@ docker-compose down --remove-orphans
 
 1. Declare as variable for debugging
 ```bash
-    export FLASK_ENV=development
-    export FLASK_APP=app.py
+export FLASK_ENV=development
+export FLASK_APP=app.py
 ```
 2.Enter the flaskr folder and run
 ```bash
-    cd flaskr
-    flask run
+cd flaskr
+flask run
 ```
 
 
