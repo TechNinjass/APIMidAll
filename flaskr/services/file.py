@@ -12,7 +12,7 @@ class FileModelService:
         self.azure = Azure()
 
     def transfer_files(self):
-        container_client = self.azure.connection_azure()
+        container_client = self.azure.connection_azure(use_json=True)
         files_drive = self.google_drive.list_files().get('files')
 
         if not files_drive:
