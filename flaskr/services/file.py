@@ -6,14 +6,13 @@ from flaskr.cloud.azure import Azure
 from flaskr.cloud.drive import GoogleDrive
 from flaskr.models.file_transfer import FileTransferModel
 
-
 class FileModelService:
     def __init__(self):
         self.google_drive = GoogleDrive()
         self.azure = Azure()
 
     def transfer_files(self):
-        container_client = self.azure.connection_azure()
+        container_client = self.azure.connection_azure(use_json=True)
         files_drive = self.google_drive.list_files().get('files')
 
         if not files_drive:
@@ -28,23 +27,27 @@ class FileModelService:
             if not isinstance(file_content, bytes):
                 file_content = bytes(str(file_content), 'utf-8')
 
+            transfer = FileTransferModel()
+            transfer.name = file_name
+            transfer.size = len(file_content)
+            transfer.format = file_name.split(".")[-1]
+            transfer.date_upload = datetime.now()
+            transfer.data_transfer = datetime.now()
+
             blob_client = container_client.get_blob_client(container='midall', blob=file_name)
 
             try:
                 blob_client.upload_blob(file_content, overwrite=True)
                 print(f"Arquivo {file_name} transferido com sucesso para o Azure Blob Storage!")
-
                 self.google_drive.remove_files(file_id)
                 print(f"Arquivo {file_name} deletado do Google Drive!")
-
-                transfer = FileTransferModel()
-                transfer.name = file_name
-                transfer.size = len(file_content)
-                transfer.format = file_name.split(".")[-1]
-                transfer.date_upload = datetime.now()
-                transfer.data_transfer = datetime.now()
-
-                transfer.save() 
-
+                transfer.status = 'transferido'
             except AzureError as ex:
                 print('Um erro ocorreu durante o upload do arquivo: {}'.format(ex))
+                transfer.status = 'erro: {}'.format(str(ex))
+
+            transfer.save()
+
+            if not isinstance(file_content, bytes):
+                file_content = bytes(str(file_content), 'utf-8')
+
