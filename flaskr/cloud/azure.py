@@ -4,7 +4,7 @@ import json
 from azure.storage.blob import BlobServiceClient
 
 import flaskr.cloud.config_credentials as cc
-class Azure:
+class Azure():
     def __init__(self):
         self.account_name = None
         self.account_key = None
