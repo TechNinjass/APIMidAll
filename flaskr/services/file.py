@@ -5,7 +5,9 @@ from azure.core.exceptions import AzureError
 from flaskr.cloud.azure import Azure
 from flaskr.cloud.drive import GoogleDrive
 from flaskr.models.file_transfer import FileTransferModel
+from win10toast import ToastNotifier
 
+import os
 
 class FileModelService:
     def __init__(self):
@@ -32,9 +34,15 @@ class FileModelService:
 
             try:
                 blob_client.upload_blob(file_content, overwrite=True)
+                # Send a alert to SO (Sucess Tranfer)
+                toaster = ToastNotifier()
+                toaster.show_toast("Transferência Concluida", 'Arquivo ({file_name}) transferido para Azure Storage.', duration=5)
                 print(f"Arquivo {file_name} transferido com sucesso para o Azure Blob Storage!")
 
                 self.google_drive.remove_files(file_id)
+                #Send a Alert to SO (Remove Files) 
+                toaster = ToastNotifier()
+                toaster.show_toast("Arquivo Removido (Google Drive)", 'Arquivo ({file_name}) deletado do Google Drive.', duration=5)
                 print(f"Arquivo {file_name} deletado do Google Drive!")
 
                 transfer = FileTransferModel()
