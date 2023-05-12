@@ -1,5 +1,5 @@
 import os
-import pickle
+import json
 from io import BytesIO
 
 from google.oauth2.credentials import Credentials
@@ -8,6 +8,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
 
+
+import flaskr.cloud.config_credentials as cc
 
 class GoogleDrive:
     def __init__(self):
@@ -30,18 +32,25 @@ class GoogleDrive:
 
         credentials = flow.run_local_server(port=0, access_type='offline', include_granted_scopes=False)
 
-        with open("tokenDrive.pickle", "wb") as token:
-            pickle.dump(credentials, token)
+        with open(cc.DRIVE_CREDENTIALS, "w") as token:
+            json.dump({
+                "token": credentials.token,
+                "refresh_token": credentials.refresh_token,
+                "token_uri": credentials.token_uri,
+                "client_id": credentials.client_id,
+                "client_secret": credentials.client_secret,
+                "scopes": credentials.scopes,
+            }, token)
 
         credentials = credentials
-
-        return {"message": "Conexão realizada com sucesso."}
+        return credentials, {"message": "Conexão realizada com sucesso."}
 
     def list_files(self):
         if not self.credentials:
-            if os.path.exists("tokenDrive.pickle"):
-                with open("tokenDrive.pickle", "rb") as token:
-                    self.credentials = pickle.load(token)
+            if os.path.exists(cc.DRIVE_CREDENTIALS):
+                with open(cc.DRIVE_CREDENTIALS, "r") as token:
+                    creds_dict = json.load(token)
+                    self.credentials = Credentials.from_authorized_user_info(info=creds_dict)
             else:
                 return {
                     "error": "As credenciais do Google Drive não foram encontradas."
@@ -66,12 +75,13 @@ class GoogleDrive:
 
         except HttpError as error:
             return {"error": f"Ocorreu um erro ao listar os arquivos: {error}"}
+
         
     def download_file(self, file_id):
         if not self.credentials:
-            if os.path.exists("tokenDrive.pickle"):
-                with open("tokenDrive.pickle", "rb") as token:
-                    self.credentials = pickle.load(token)
+            if os.path.exists(cc.DRIVE_CREDENTIALS):
+                with open(cc.DRIVE_CREDENTIALS, "r") as token:
+                    self.credentials = Credentials.from_authorized_user_info(info=json.load(token))
             else:
                 return {
                     "error": "As credenciais do Google Drive não foram encontradas."
@@ -92,9 +102,9 @@ class GoogleDrive:
 
     def remove_files(self, file_id):
         if not self.credentials:
-            if os.path.exists("tokenDrive.pickle"):
-                with open("tokenDrive.pickle", "rb") as token:
-                    self.credentials = pickle.load(token)
+            if os.path.exists(cc.DRIVE_CREDENTIALS):
+                with open(cc.DRIVE_CREDENTIALS, "r") as token:
+                    self.credentials = json.load(token)
             else:
                 return {
                     "error": "As credenciais do Google Drive não foram encontradas."
