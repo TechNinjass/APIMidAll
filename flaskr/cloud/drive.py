@@ -9,10 +9,10 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
 
 
-import flaskr.cloud.config_credentials as cc
+import flaskr.cloud.set_parameters as sp
 
 class GoogleDrive:
-    def __init__(self):
+    def _init_(self):
         self.credentials = None
 
     def get_creds(client_id, client_secret):
@@ -32,7 +32,7 @@ class GoogleDrive:
 
         credentials = flow.run_local_server(port=0, access_type='offline', include_granted_scopes=False)
 
-        with open(cc.DRIVE_CREDENTIALS, "w") as token:
+        with open(sp.DRIVE_CREDENTIALS, "w") as token:
             json.dump({
                 "token": credentials.token,
                 "refresh_token": credentials.refresh_token,
@@ -45,10 +45,17 @@ class GoogleDrive:
         credentials = credentials
         return credentials, {"message": "Conexão realizada com sucesso."}
 
+    def get_folder_id_by_name(drive_client, folder_name):
+        query = f"name='{folder_name}' and mimeType='application/vnd.google-apps.folder'"
+        results = drive_client.files().list(q=query, fields="files(id)").execute()
+        items = results.get("files", [])
+        if items:
+            return items[0]["id"]
+    
     def list_files(self):
         if not self.credentials:
-            if os.path.exists(cc.DRIVE_CREDENTIALS):
-                with open(cc.DRIVE_CREDENTIALS, "r") as token:
+            if os.path.exists(sp.DRIVE_CREDENTIALS):
+                with open(sp.DRIVE_CREDENTIALS, "r") as token:
                     creds_dict = json.load(token)
                     self.credentials = Credentials.from_authorized_user_info(info=creds_dict)
             else:
@@ -57,12 +64,26 @@ class GoogleDrive:
                 }
         try:
             drive_client = build("drive", "v3", credentials=self.credentials)
+
+            # Lê o nome da pasta do arquivo JSON
+            with open(sp.PARAMETERS_TRANSFER, "r") as f:
+                data = json.load(f)
+            folder_name = data["folder_drive"]
+
+            # Busca o ID da pasta pelo nome
+            folder_id = None
+            if folder_name:
+                folder_id = GoogleDrive.get_folder_id_by_name(drive_client, folder_name)
+                if not folder_id:
+                    return {"error": f"A pasta '{folder_name}' não foi encontrada."}
+
             files = []
             results = drive_client.files().list(
-                q="'1CVSxS3Tktbz1ugxATpsjG8ZRfBr9ayRp' in parents",
+                q=f"'{folder_id}' in parents",
                 pageSize=10,
                 fields="nextPageToken, files(id, name)"
             ).execute()
+
             items = results.get("files", [])
 
             if not items:
@@ -77,10 +98,42 @@ class GoogleDrive:
             return {"error": f"Ocorreu um erro ao listar os arquivos: {error}"}
 
         
+    def list_folders(self):
+        if not self.credentials:
+            if os.path.exists(sp.DRIVE_CREDENTIALS):
+                with open(sp.DRIVE_CREDENTIALS, "r") as token:
+                    creds_dict = json.load(token)
+                    self.credentials = Credentials.from_authorized_user_info(info=creds_dict)
+            else:
+                return {
+                    "error": "As credenciais do Google Drive não foram encontradas."
+                }
+        try:
+            drive_client = build("drive", "v3", credentials=self.credentials)
+            folders = []
+            results = drive_client.files().list(
+                q="mimeType='application/vnd.google-apps.folder'",
+                pageSize=10,
+                fields="nextPageToken, files(id, name)"
+            ).execute()
+            items = results.get("files", [])
+
+            if not items:
+                return {"message": "Nenhuma pasta encontrada."}
+
+            for item in items:
+                folders.append(f"{item['name']} ({item['id']})")
+
+            return {"folders": folders}
+
+        except HttpError as error:
+            return {"error": f"Ocorreu um erro ao listar as pastas: {error}"}
+
+
     def download_file(self, file_id):
         if not self.credentials:
-            if os.path.exists(cc.DRIVE_CREDENTIALS):
-                with open(cc.DRIVE_CREDENTIALS, "r") as token:
+            if os.path.exists(sp.DRIVE_CREDENTIALS):
+                with open(sp.DRIVE_CREDENTIALS, "r") as token:
                     self.credentials = Credentials.from_authorized_user_info(info=json.load(token))
             else:
                 return {
@@ -102,8 +155,8 @@ class GoogleDrive:
 
     def remove_files(self, file_id):
         if not self.credentials:
-            if os.path.exists(cc.DRIVE_CREDENTIALS):
-                with open(cc.DRIVE_CREDENTIALS, "r") as token:
+            if os.path.exists(sp.DRIVE_CREDENTIALS):
+                with open(sp.DRIVE_CREDENTIALS, "r") as token:
                     self.credentials = json.load(token)
             else:
                 return {
