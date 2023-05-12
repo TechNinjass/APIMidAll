@@ -48,4 +48,6 @@ class FileModelService:
 
             transfer.save()
 
+            if not isinstance(file_content, bytes):
+                file_content = bytes(str(file_content), 'utf-8')
 
