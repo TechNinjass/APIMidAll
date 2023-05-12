@@ -21,7 +21,6 @@ class TestAzure:
 
     
     def test_connection_azure_invalid_credentials_file(self, mocker):
-        
         mocker.patch('os.path.exists', return_value=False)
 
       
