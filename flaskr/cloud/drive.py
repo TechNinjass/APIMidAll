@@ -62,6 +62,7 @@ class GoogleDrive:
                 return {
                     "error": "As credenciais do Google Drive não foram encontradas."
                 }
+
         try:
             drive_client = build("drive", "v3", credentials=self.credentials)
 
