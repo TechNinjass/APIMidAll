@@ -1,13 +1,13 @@
 import json
 from datetime import datetime
 
+import plyer
 from azure.core.exceptions import AzureError
 
 import flaskr.cloud.set_parameters as sp
 from flaskr.cloud.azure import Azure
 from flaskr.cloud.drive import GoogleDrive
 from flaskr.models.file_transfer import FileTransferModel
-from win10toast import ToastNotifier
 
 
 class FileModelService:
@@ -21,8 +21,6 @@ class FileModelService:
 
         if not files_drive:
             print("Nenhum arquivo encontrado no Google Drive.")
-            toasterexception = ToastNotifier()
-            toasterexception.show_toast("Not Found Files", 'Nenhum arquivo encontrado no Google Drive', duration=2)
             return
 
         with open(sp.PARAMETERS_TRANSFER) as f:
@@ -51,22 +49,27 @@ class FileModelService:
             else:
                 blob_client = container_client.get_blob_client(container='midall', blob=file_name)
             try:
-                toaster = ToastNotifier()
                 blob_client.upload_blob(file_content, overwrite=True)
                 print(f"Arquivo {file_name} transferido com sucesso para o Azure Blob Storage!")
-                toaster.show_toast("Transferência Concluida", 'Arquivo {file_name} transferido com sucesso para o Azure Storage!', duration=4)
                 self.google_drive.remove_files(file_id)
                 print(f"Arquivo {file_name} deletado do Google Drive!")
                 transfer.status = 'transferido'
-                toaster.show_toast("Arquivo Removido", 'Arquivo {file_name} deletado do Google Drive!', duration=4)
+                plyer.notification.notify(
+                    title='Transferência Concluída',
+                    message=f'Arquivo "{file_name}" foi transferido com sucesso para o Azure Blob Storage!',
+                    app_name='Midall Transfer',
+                    timeout=5
+                )
             except AzureError as ex:
                 print('Um erro ocorreu durante o upload do arquivo: {}'.format(ex))
-                toasterexception = ToastNotifier()
-                toasterexception.show_toast("Erro de Tranferência", 'Um erro ocorreu durante a tranferência do arquivo: {}'.format(ex), duration=6)
                 transfer.status = 'erro: {}'.format(str(ex))
-
+                plyer.notification.notify(
+                    title='Ocorreu um erro ao transferir',
+                    message=f'Arquivo "{file_name}" não foi transferido!',
+                    app_name='Midall Transfer',
+                    timeout=5
+                )
             transfer.save()
 
             if not isinstance(file_content, bytes):
                 file_content = bytes(str(file_content), 'utf-8')
-
