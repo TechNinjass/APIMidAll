@@ -29,7 +29,6 @@ class TestDrive:
 
 
     def test_download_file_successful(self, mocker):
-        # Mock credentials and build method
         mock_creds = mocker.Mock()
         mock_build = mocker.Mock()
         mocker.patch.object(GoogleDrive, 'download_file', return_value=b"test_file_content")
