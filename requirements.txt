@@ -59,7 +59,6 @@ pyflakes==3.0.1
 PyJWT==2.6.0
 pymssql==2.2.7
 pyparsing==3.0.9
-pypiwin32==223
 pytest==7.2.2
 pytest-mock==3.10.0
 python-dateutil==2.8.2
@@ -80,5 +79,4 @@ tzlocal==4.3
 uritemplate==4.1.1
 urllib3==1.26.15
 Werkzeug==2.2.3
-win10toast==0.9
 zipp==3.15.0
