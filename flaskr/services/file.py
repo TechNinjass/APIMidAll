@@ -1,10 +1,13 @@
+import json
 from datetime import datetime
 
 from azure.core.exceptions import AzureError
 
+import flaskr.cloud.set_parameters as sp
 from flaskr.cloud.azure import Azure
 from flaskr.cloud.drive import GoogleDrive
 from flaskr.models.file_transfer import FileTransferModel
+
 
 class FileModelService:
     def __init__(self):
@@ -18,6 +21,10 @@ class FileModelService:
         if not files_drive:
             print("Nenhum arquivo encontrado no Google Drive.")
             return
+
+        with open(sp.PARAMETERS_TRANSFER) as f:
+            params = json.load(f)
+        folder_name = params.get('folder_azure')
 
         for item in files_drive:
             file_name = item.split("(")[0].strip()
@@ -33,9 +40,13 @@ class FileModelService:
             transfer.format = file_name.split(".")[-1]
             transfer.date_upload = datetime.now()
             transfer.data_transfer = datetime.now()
-
-            blob_client = container_client.get_blob_client(container='midall', blob=file_name)
-
+            
+            blob_path = f"{folder_name}/{file_name}" if folder_name else file_name
+            
+            if blob_path != None:
+                blob_client = container_client.get_blob_client(container='midall', blob=blob_path)
+            else:
+                blob_client = container_client.get_blob_client(container='midall', blob=file_name)
             try:
                 blob_client.upload_blob(file_content, overwrite=True)
                 print(f"Arquivo {file_name} transferido com sucesso para o Azure Blob Storage!")
