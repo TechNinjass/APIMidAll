@@ -2,6 +2,8 @@ from flask import request
 from flask_restful import Resource
 
 from flaskr.cloud.config_transfer import get_info_transfer
+
+
 class ConfigParametersTransferResource(Resource):
     def post(self):
 

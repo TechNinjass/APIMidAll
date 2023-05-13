@@ -1,11 +1,13 @@
-import os.path
 import json
+import os.path
 
-from azure.storage.blob import BlobServiceClient, BlobProperties
+from azure.storage.blob import BlobProperties, BlobServiceClient
 
 import flaskr.cloud.set_parameters as sp
+
+
 class Azure():
-    def _init_(self):
+    def __init__(self):
         self.account_name = None
         self.account_key = None
         self.container_name = None
@@ -40,25 +42,32 @@ class Azure():
             credentials = json.load(f)
 
         connect_str = f"DefaultEndpointsProtocol=https;AccountName={credentials['account_name']};AccountKey={credentials['account_key']};EndpointSuffix=core.windows.net"
-
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+
+        with open(sp.PARAMETERS_TRANSFER) as f:
+            params = json.load(f)
+        folder_name = params.get('folder_azure')
 
         container_name = credentials['container_name']
         container_client = blob_service_client.get_container_client(container_name)
 
-        blob_list = container_client.list_blobs()
+        if folder_name:
+            blob_list = container_client.list_blobs(name_starts_with=folder_name)
+        else:
+            blob_list = container_client.list_blobs()
 
         files = []
         for blob in blob_list:
-            file = {
-                "name": blob.name,
-                "size": blob.size,
-                "content_type": blob.content_settings.content_type
-            }
-            files.append(file)
+            if not blob.name.endswith('/'):
+                file = {
+                    "name": blob.name,
+                    "size": blob.size,
+                    "content_type": blob.content_settings.content_type
+                }
+                files.append(file)
 
         return files
-    
+
     def list_folders(self):
         with open(sp.AZURE_CREDENTIALS) as f:
             credentials = json.load(f)
