@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+import plyer
 from azure.core.exceptions import AzureError
 
 import flaskr.cloud.set_parameters as sp
@@ -53,12 +54,22 @@ class FileModelService:
                 self.google_drive.remove_files(file_id)
                 print(f"Arquivo {file_name} deletado do Google Drive!")
                 transfer.status = 'transferido'
+                plyer.notification.notify(
+                    title='Transferência Concluída',
+                    message=f'Arquivo "{file_name}" foi transferido com sucesso para o Azure Blob Storage!',
+                    app_name='Midall Transfer',
+                    timeout=5
+                )
             except AzureError as ex:
                 print('Um erro ocorreu durante o upload do arquivo: {}'.format(ex))
                 transfer.status = 'erro: {}'.format(str(ex))
-
+                plyer.notification.notify(
+                    title='Ocorreu um erro ao transferir',
+                    message=f'Arquivo "{file_name}" não foi transferido!',
+                    app_name='Midall Transfer',
+                    timeout=5
+                )
             transfer.save()
 
             if not isinstance(file_content, bytes):
                 file_content = bytes(str(file_content), 'utf-8')
-

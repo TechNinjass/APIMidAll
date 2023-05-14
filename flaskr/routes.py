@@ -25,5 +25,6 @@ def config_app_routes(app):
     
     return api
 
+
 def __setting_route_doc(resource, route, api):
     api.add_resource(resource, route)

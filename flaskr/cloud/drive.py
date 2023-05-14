@@ -121,7 +121,7 @@ class GoogleDrive:
                 return {"message": "Nenhuma pasta encontrada."}
 
             for item in items:
-                folders.append(f"{item['name']} ({item['id']})")
+                folders.append(f"{item['name']}")
 
             return {"folders": folders}
 
