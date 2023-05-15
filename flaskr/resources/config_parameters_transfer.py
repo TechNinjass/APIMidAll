@@ -7,8 +7,8 @@ from flaskr.cloud.config_transfer import get_info_transfer
 class ConfigParametersTransferResource(Resource):
     def post(self):
 
-        hours = request.json.get("hours")
-        minutes = request.json.get("minutes")
+        hours = int(request.json.get("hours"))
+        minutes = int(request.json.get("minutes"))
         folder_drive = request.json.get("folder_drive")
         folder_azure = request.json.get("folder_azure")
         
