@@ -1,7 +1,9 @@
-import os.path
 import json
+import os.path
 
 import flaskr.cloud.set_parameters as sp
+
+
 def get_info_transfer(hours, minutes, folder_drive, folder_azure, use_json=True):
     
     if use_json:

@@ -18,8 +18,7 @@ class TestAzure:
         file_transfer.save()
         mock_session.merge.assert_called_once_with(file_transfer)
         mock_session.commit.assert_called_once()
-
-    
+ 
     def test_connection_azure_invalid_credentials_file(self, mocker):
         mocker.patch('os.path.exists', return_value=False)
 

@@ -1,5 +1,5 @@
-import os
 import json
+import os
 from io import BytesIO
 
 from google.oauth2.credentials import Credentials
@@ -8,11 +8,11 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
 
-
 import flaskr.cloud.set_parameters as sp
 
+
 class GoogleDrive:
-    def _init_(self):
+    def __init__(self):
         self.credentials = None
 
     def get_creds(client_id, client_secret):
@@ -62,15 +62,14 @@ class GoogleDrive:
                 return {
                     "error": "As credenciais do Google Drive não foram encontradas."
                 }
+
         try:
             drive_client = build("drive", "v3", credentials=self.credentials)
 
-            # Lê o nome da pasta do arquivo JSON
             with open(sp.PARAMETERS_TRANSFER, "r") as f:
                 data = json.load(f)
             folder_name = data["folder_drive"]
-
-            # Busca o ID da pasta pelo nome
+            
             folder_id = None
             if folder_name:
                 folder_id = GoogleDrive.get_folder_id_by_name(drive_client, folder_name)
@@ -122,7 +121,7 @@ class GoogleDrive:
                 return {"message": "Nenhuma pasta encontrada."}
 
             for item in items:
-                folders.append(f"{item['name']} ({item['id']})")
+                folders.append(f"{item['name']}")
 
             return {"folders": folders}
 
