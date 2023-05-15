@@ -22,7 +22,7 @@ api = config_app_routes(app)
 migrate = load_migrate(db_instance, app)
 
 # Scheduled_job
-init_apscheduler(app, True)
+init_apscheduler(app, True, 'task_transfer_files')
 
 if __name__ == '__main__':
     app.run()
