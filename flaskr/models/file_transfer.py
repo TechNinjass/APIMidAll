@@ -9,7 +9,8 @@ class FileTransferModel(db_instance.Model):
     format = db_instance.Column(db_instance.String(100))
     date_upload = db_instance.Column(db_instance.Date)
     data_transfer = db_instance.Column(db_instance.Date)
-
+    status = db_instance.Column(db_instance.String(100))
+    
     @db_persist
     def save(self):
         db_instance.session.merge(self)
