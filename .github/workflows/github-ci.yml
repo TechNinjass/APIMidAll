@@ -13,7 +13,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -36,3 +35,15 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          curl https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -o build-wrapper-linux-x86.zip
+          unzip build-wrapper-linux-x86.zip
+          curl https://sonarcloud.io/static/cpp/sonar-scanner-cli-4.6.2.2472-linux.zip -o sonar-scanner.zip
+          unzip sonar-scanner.zip
+          mv sonar-scanner-4.6.2.2472-linux sonar-scanner
+          export PATH=$PWD/sonar-scanner/bin:$PATH
+          build-wrapper-linux-x86-64 --out-dir bw-output <YOUR BUILD COMMAND>
+          sonar-scanner
