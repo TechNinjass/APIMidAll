@@ -19,7 +19,7 @@ class GoogleDriveResource(MethodResource, Resource):
 
         try:
             creds = GoogleDrive.get_creds(client_id, client_secret)
-            return make_response({"message": "Conexão realizada com sucesso!"}, 200)
+            return make_response({"message": "Conexão realizada com sucesso!", "credentials": creds}, 200)
 
         except Exception as e:
             return make_response({"error": str(e)}, 500)

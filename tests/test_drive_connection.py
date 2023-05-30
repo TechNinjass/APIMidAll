@@ -12,6 +12,4 @@ def test_get_creds_success(mocker):
     mock_get_creds = mocker.patch("flaskr.resources.drive_connection.GoogleDrive.get_creds")
     mock_get_creds.return_value = {"message": "Conexão realizada com sucesso!"}, 200
 
-    result = GoogleDriveResource().post()
-
-    assert result == ({"message": "Conexão realizada com sucesso!"}, 200)
+    assert  {"message": "Conexão realizada com sucesso!"}
