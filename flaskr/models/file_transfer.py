@@ -1,5 +1,6 @@
 from flaskr.db import db_instance, db_persist
 
+
 class FileTransferModel(db_instance.Model):
     __tablename__ = 'file_transfer'
 

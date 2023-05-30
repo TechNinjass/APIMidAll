@@ -11,20 +11,21 @@ from flaskr.resources.drive_list_folder import GoogleDriveFolderResource
 from flaskr.resources.file_transfer import FileTransferResource
 
 
-def config_app_routes(app):
+def config_app_routes(app, docs):
     api = Api(app)
     
-    __setting_route_doc(AzureResource, "/azure", api)
-    __setting_route_doc(AzureFilesResource, "/azure_files", api)
-    __setting_route_doc(AzureFolderResource, "/azure_folders", api)
-    __setting_route_doc(GoogleDriveResource, "/drive", api)
-    __setting_route_doc(GoogleDriveFilesResource, "/drive_files/", api)
-    __setting_route_doc(GoogleDriveFolderResource, "/drive_folders/", api)
-    __setting_route_doc(ConfigParametersTransferResource, "/config_transfer", api)
-    __setting_route_doc(FileTransferResource, "/transfer_files", api)
+    __setting_route_doc(AzureResource, "/azure", api, docs)
+    __setting_route_doc(AzureFilesResource, "/azure_files", api, docs)
+    __setting_route_doc(AzureFolderResource, "/azure_folders", api, docs)
+    __setting_route_doc(GoogleDriveResource, "/drive", api, docs)
+    __setting_route_doc(GoogleDriveFilesResource, "/drive_files/", api, docs)
+    __setting_route_doc(GoogleDriveFolderResource, "/drive_folders/", api, docs)
+    __setting_route_doc(ConfigParametersTransferResource, "/config_transfer", api, docs)
+    __setting_route_doc(FileTransferResource, "/transfer_files", api, docs)
     
     return api
 
 
-def __setting_route_doc(resource, route, api):
+def __setting_route_doc(resource, route, api, docs):
     api.add_resource(resource, route)
+    docs.register(resource)
