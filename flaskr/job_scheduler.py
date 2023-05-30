@@ -1,11 +1,12 @@
 import json
+from datetime import datetime
+
 from flask_apscheduler import APScheduler
 
+import flaskr.cloud.set_parameters as sp
 from flaskr.db import db_instance
 from flaskr.services.file import FileModelService
 
-import flaskr.cloud.set_parameters as sp
-from datetime import datetime
 
 def task_transfer_files(scheduler):
     with db_instance.app.app_context():
