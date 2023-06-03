@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  backend-app:
+  midall-backend-app:
     container_name: midall-backend-app
     image: midall-backend-app
     build:
@@ -14,9 +14,11 @@ services:
       - ${FLASKR_BACK_DEV_DIR}:/flaskr
     env_file:
       - .env
+    networks:
+      - midall-network
 
 networks:
-  network:
+  midall-network:
     driver: bridge
     external: false
     name: midall-network

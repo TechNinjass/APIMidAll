@@ -76,10 +76,7 @@ pip freeze > requirements.txt
 
 ## Set paths and values in application
 
-Before run the statements below, edit the value of parameter
-**FLASKR_DEV_DIR** in the **.env** file of the **docker** folder with the
-absolute path of **flaskr/** project folder in you host and declare absolute
-path of cloud folder in **config_credentials.py** file
+Before executing the instructions below, edit the value of the **FLASKR_DEV_DIR** parameter in the **.env** file of the **docker** folder with the absolute path of the **flaskr/** project folder on your host and declare the absolute paths of the cloud files in the **set_parameters.py** file
 ## Running Flask back-end via docker-compose
 ### Start all back-end via docker-compose
 
