@@ -8,12 +8,15 @@ db_instance = SQLAlchemy()
 def config_sql_alchemy(app):
 
     app.config['SQLALCHEMY_DATABASE_URI'] = ca.MIDALL_DATABASE_URL
+    app.config['SQLALCHEMY_BINDS'] = {
+        'ninjasnovo': ca.MIDALL_DATABASE_URL,  
+        'Migration_CI': ca.MIDALL_DATABASE_DEVELOPER_URL 
+    }
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = ca.SQLALCHEMY_TRACK_MODIFICATIONS
     app.config['SQLALCHEMY_ECHO'] = ca.SQLALCHEMY_ECHO
 
     db_instance.app = app
     db_instance.init_app(app)
-
 
 def db_persist(func):
     def persist(*args, **kwargs):
