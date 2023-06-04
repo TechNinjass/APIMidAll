@@ -1,4 +1,5 @@
 import json
+import time
 from datetime import datetime
 
 import plyer
@@ -14,6 +15,8 @@ class FileModelService:
     def __init__(self):
         self.google_drive = GoogleDrive()
         self.azure = Azure()
+        self.transfer_size = 0
+        self.bandwidth_limit = 100
 
     def transfer_files(self):
         container_client = self.azure.connection_azure(use_json=True)
@@ -28,6 +31,11 @@ class FileModelService:
         folder_name = params.get('folder_azure')
 
         for item in files_drive:
+            print(self.transfer_size)
+            if self.transfer_size >= self.bandwidth_limit:
+                print("Limite de banda atingido. A transferência será interrompida até o próximo ciclo.")
+                break
+            time.sleep(0.5)
             file_name = item.split("(")[0].strip()
             file_id = item.split("(")[1].replace(")", "")
             file_content = self.google_drive.download_file(file_id)
@@ -60,6 +68,8 @@ class FileModelService:
                     app_name='Midall Transfer',
                     timeout=5
                 )
+                self.transfer_size += transfer.size
+                print(self.transfer_size)
             except AzureError as ex:
                 print('Um erro ocorreu durante o upload do arquivo: {}'.format(ex))
                 transfer.status = 'erro: {}'.format(str(ex))
