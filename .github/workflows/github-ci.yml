@@ -36,3 +36,7 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
+      - name: Test migration
+        run: |
+          cd flaskr
+          python migration_developer.py

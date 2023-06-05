@@ -1,24 +1,42 @@
-from flaskr.models.file_transfer import FileTransferModel
-from flaskr.models.file_transfer_developer import FileTransferDeveloperModel
-from flaskr.db import db_instance
+import pyodbc
 
-def migrate_data():
-    with db_instance.app.app_context():
-        
-        file_transfers = FileTransferModel.query.all()
+__DRIVER = '{ODBC Driver 17 for SQL Server}'
 
-        for file_transfer in file_transfers:
-            
-            new_file_transfer = FileTransferDeveloperModel(
-                name=file_transfer.name,
-                size=file_transfer.size,
-                format=file_transfer.format,
-                date_upload=file_transfer.date_upload,
-                data_transfer=file_transfer.data_transfer,
-                status=file_transfer.status
-            )
+__SERVER = 'ninjasnovo.database.windows.net'
+__DATABASE = 'ninjasnovo'
+__UID = 'CloudSAb47816c8'
+__PASSWORD = 'Fatec1000@@@'
+__CONNECTION_STR = (
+    f'DRIVER={__DRIVER};SERVER={__SERVER};'
+    f'DATABASE={__DATABASE};UID={__UID};PWD={__PASSWORD}'
+)
 
-            db_instance.session.add(new_file_transfer)
 
-        db_instance.session.commit()
-        print('data migration done')
+__DRIVER_DEVELOPER = '{ODBC Driver 17 for SQL Server}'
+
+__SERVER_DEVELOPER = 'ninjasnovo.database.windows.net'
+__DATABASE_DEVELOPER = 'Migration_CI'
+__UID_DEVELOPER = 'CloudSAb47816c8'
+__PASSWORD_DEVELOPER = 'Fatec1000@@@' 
+__CONNECTION_STR_DEVELOPER = (
+    f'DRIVER={__DRIVER_DEVELOPER};SERVER={__SERVER_DEVELOPER};'
+    f'DATABASE={__DATABASE_DEVELOPER};UID={__UID_DEVELOPER};PWD={__PASSWORD_DEVELOPER}'
+)
+
+
+def query(sql: str):
+    with pyodbc.connect(__CONNECTION_STR) as cnxn:
+        with cnxn.cursor() as cursor:
+            return list(cursor.execute(sql))
+
+
+def insert_values_file_transfer():
+    values_file = query("SELECT name, size, format, date_upload, data_transfer, status FROM file_transfer")
+    with pyodbc.connect(__CONNECTION_STR_DEVELOPER) as cnxn:
+        with cnxn.cursor() as cursor:
+            cursor.executemany("""
+            INSERT INTO [file_transfer_developer] (name, size, format, date_upload, data_transfer, status)
+            VALUES (?, ?, ?, ?, ?, ?)""", values_file)
+
+
+insert_values_file_transfer()
