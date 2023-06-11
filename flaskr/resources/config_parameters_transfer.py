@@ -17,10 +17,12 @@ class ConfigParametersTransferResource(MethodResource, Resource):
 
         hours = int(request.json.get("hours"))
         minutes = int(request.json.get("minutes"))
+        bandwidth_limit = int(request.json.get('bandwidth_limit'))
         folder_drive = request.json.get("folder_drive")
         folder_azure = request.json.get("folder_azure")
         
-        parameters = get_info_transfer(hours=hours, minutes=minutes,\
-                                       folder_drive=folder_drive, folder_azure=folder_azure)
+        parameters = get_info_transfer(hours=hours, minutes=minutes, \
+                                       bandwidth_limit = bandwidth_limit, folder_drive=folder_drive, \
+                                       folder_azure=folder_azure)
         
         return make_response({"message": "sucess config!"}, 200)
