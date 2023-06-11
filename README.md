@@ -105,4 +105,9 @@ cd flaskr
 flask run
 ```
 
+## Swagger Documentation UI
+
+Access http://localhost:5000/swagger-ui
+
+
 
